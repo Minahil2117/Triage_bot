@@ -62,30 +62,6 @@ python main.py
 
 ---
 
-## 🎬 How to Record a 30-Second LinkedIn Demo Video
-
-1. Open **[http://127.0.0.1:8000/](http://127.0.0.1:8000/)** in one half of your screen and **[http://127.0.0.1:8000/dashboard](http://127.0.0.1:8000/dashboard)** in the other half.
-2. Click **"🔴 Scenario A: Acute Chest Pain (Critical)"** on the intake form.
-3. Click **"Submit Intake & Trigger AI Triage Pipeline"**.
-4. Show the instant triage assessment pop up with the **CRITICAL** badge and SBAR note.
-5. Switch to the Staff Dashboard and show the patient arriving in real-time in the queue with the red pulse alert!
-6. Click **"Inspect SBAR"** to show the doctor handoff.
-
----
-
-## 📝 LinkedIn Post Template (Copy & Paste to attract recruiters!)
-
-```markdown
-🚀 Built an automated AI Patient Intake & Clinical Triage pipeline this weekend!
-
-In healthcare startups and emergency clinics, every second counts. Traditional intake workflows rely on manual triage, leading to backlogs and delayed care for high-risk patients.
-
-To solve this, I engineered PulseGuard AI:
-• 🧠 Automated Clinical Triage: Ingests patient symptoms and classifies urgency (Critical, Medium, Routine) with a 1-100 risk score and department routing.
-• 🩺 SBAR Handoff Generation: Automatically produces structured Situation-Background-Assessment notes for attending physicians.
-• ⚡ Multi-Channel Dispatch: Event-driven webhooks alerting emergency staff via Discord/Slack in sub-seconds.
-• 💻 Modern Full-Stack Architecture: Built with FastAPI, Python, SQLite, and a responsive clinical command dashboard.
-
 Check out the 30-second live demo below! 👇
 
 Tech Stack: Python, FastAPI, Webhooks, AI Triage Pipelines, SQLite, Modern Frontend.
