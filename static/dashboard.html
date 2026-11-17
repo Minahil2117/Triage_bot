@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PulseGuard Clinical Dashboard • Live Triage Monitor</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">PulseGuard<span class="accent-dot">.ai</span></span>
+          <span class="brand-tag">Clinical Staff Command Center</span>
+        </div>
+      </div>
+      <nav class="nav-links">
+        <a href="/" class="nav-link">+ New Intake</a>
+        <a href="/dashboard" class="nav-link active">Staff Dashboard</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container-fluid">
+    <!-- Top Stats Row -->
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon icon-total">👥</div>
+        <div class="stat-info">
+          <span class="stat-label">Total Intakes</span>
+          <span class="stat-value" id="statTotal">--</span>
+        </div>
+      </div>
+
+      <div class="stat-card stat-critical-card">
+        <div class="stat-icon icon-critical">🚨</div>
+        <div class="stat-info">
+          <span class="stat-label">Critical Red Flags</span>
+          <span class="stat-value text-red" id="statCritical">--</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-medium">⚠️</div>
+        <div class="stat-info">
+          <span class="stat-label">Urgent Care (Medium)</span>
+          <span class="stat-value text-yellow" id="statMedium">--</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon icon-low">✅</div>
+        <div class="stat-info">
+          <span class="stat-label">Routine / Outpatient</span>
+          <span class="stat-value text-green" id="statLow">--</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <section class="dashboard-card">
+      <div class="card-toolbar">
+        <div class="toolbar-left">
+          <h2>Active Patient Triage Queue</h2>
+          <span class="live-pill"><span class="pulse-circle"></span> Live Sync</span>
+        </div>
+
+        <div class="toolbar-right">
+          <!-- Filter Buttons -->
+          <div class="filter-group">
+            <button class="filter-btn active" data-filter="ALL" onclick="setFilter('ALL')">All</button>
+            <button class="filter-btn filter-crit" data-filter="CRITICAL" onclick="setFilter('CRITICAL')">Critical</button>
+            <button class="filter-btn filter-med" data-filter="MEDIUM" onclick="setFilter('MEDIUM')">Medium</button>
+            <button class="filter-btn filter-lo" data-filter="LOW" onclick="setFilter('LOW')">Routine</button>
+          </div>
+
+          <button class="btn-refresh" onclick="loadDashboardData()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+            </svg>
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Patients Table -->
+      <div class="table-container">
+        <table class="triage-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Patient</th>
+              <th>Chief Complaint</th>
+              <th>Urgency / Priority</th>
+              <th>Score</th>
+              <th>Assigned Department</th>
+              <th>Time</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="patientsTableBody">
+            <tr>
+              <td colspan="8" class="text-center py-4">Loading queue...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Detailed Patient Assessment Modal -->
+  <div id="detailModal" class="modal-backdrop" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrapper">
+          <span class="badge" id="modalUrgencyBadge">CRITICAL</span>
+          <h3 id="modalPatientName">Patient Assessment</h3>
+          <span class="modal-id" id="modalPatientId">PT-10492</span>
+        </div>
+        <button class="btn-close-modal" onclick="closeModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-section">
+          <h4>Patient Profile & Contact</h4>
+          <div class="modal-info-grid">
+            <div><strong>Age / Gender:</strong> <span id="modalAgeGender">--</span></div>
+            <div><strong>Contact Email:</strong> <span id="modalEmail">--</span></div>
+            <div><strong>Contact Phone:</strong> <span id="modalPhone">--</span></div>
+            <div><strong>Onset / Duration:</strong> <span id="modalDuration">--</span></div>
+            <div><strong>Pre-existing Conditions:</strong> <span id="modalConditions">--</span></div>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h4>Chief Complaint & Reported Details</h4>
+          <p class="complaint-highlight" id="modalComplaint"></p>
+          <p class="symptoms-text" id="modalSymptoms"></p>
+        </div>
+
+        <div class="modal-section">
+          <h4>AI Clinical Triage Assessment</h4>
+          <div class="triage-assessment-box">
+            <div><strong>Assigned Department:</strong> <span class="badge-dept" id="modalDept">--</span></div>
+            <div><strong>Risk Score:</strong> <span class="score-pill" id="modalScore">--</span></div>
+            <div style="margin-top: 0.75rem;">
+              <strong>Clinical Rationale:</strong>
+              <p id="modalRationale" style="margin-top: 0.25rem; line-height: 1.5; color: #cbd5e1;"></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h4>Physician SBAR Handoff</h4>
+          <pre id="modalPhysicianNotes" class="sbar-code"></pre>
+        </div>
+
+        <div class="modal-section">
+          <h4>Automated Notification Dispatched to Patient</h4>
+          <p id="modalPatientMsg" class="patient-msg-quote"></p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-primary" onclick="closeModal()">Close Assessment</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+  <script>
+    // Initialize Dashboard
+    document.addEventListener("DOMContentLoaded", () => {
+      loadDashboardData();
+      // Auto-poll every 6 seconds for new arrivals
+      setInterval(loadDashboardData, 6000);
+    });
+  </script>
+</body>
+</html>
