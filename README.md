@@ -62,8 +62,3 @@ python main.py
 
 ---
 
-Check out the 30-second live demo below! 👇
-
-Tech Stack: Python, FastAPI, Webhooks, AI Triage Pipelines, SQLite, Modern Frontend.
-#SoftwareEngineering #AIAutomation #HealthTech #FullStack #Python #GenerativeAI
-```
